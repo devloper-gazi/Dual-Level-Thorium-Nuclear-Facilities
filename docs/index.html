@@ -1,0 +1,1617 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Thorium Nuclear Facilities: Global Analysis</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --bg-primary: #0a0e27;
+            --bg-secondary: #151931;
+            --bg-card: #1e2139;
+            --text-primary: #ffffff;
+            --text-secondary: #a0a9c9;
+            --accent-primary: #00d4ff;
+            --accent-secondary: #ff6b6b;
+            --accent-tertiary: #4ecdc4;
+            --accent-quaternary: #ffe66d;
+            --accent-success: #52c41a;
+            --gradient-1: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            --gradient-2: linear-gradient(135deg, #00d4ff 0%, #0056ff 100%);
+            --gradient-3: linear-gradient(135deg, #ff6b6b 0%, #ff4757 100%);
+            --shadow-card: 0 10px 40px rgba(0, 212, 255, 0.1);
+            --border-color: rgba(160, 169, 201, 0.2);
+        }
+
+        body.light-mode {
+            --bg-primary: #f7f9fc;
+            --bg-secondary: #ffffff;
+            --bg-card: #ffffff;
+            --text-primary: #1a1a2e;
+            --text-secondary: #5a6c8d;
+            --accent-primary: #0056ff;
+            --accent-secondary: #ff4757;
+            --accent-tertiary: #00b8a9;
+            --accent-quaternary: #ffc107;
+            --accent-success: #28a745;
+            --gradient-1: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            --gradient-2: linear-gradient(135deg, #0056ff 0%, #00d4ff 100%);
+            --gradient-3: linear-gradient(135deg, #ff4757 0%, #ff6b6b 100%);
+            --shadow-card: 0 10px 40px rgba(0, 0, 0, 0.08);
+            --border-color: rgba(90, 108, 141, 0.15);
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            overflow-x: hidden;
+            transition: all 0.3s ease;
+        }
+
+        /* Header */
+        .header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            background: var(--bg-secondary);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid var(--border-color);
+            padding: 1rem 2rem;
+            transition: all 0.3s ease;
+        }
+
+        .header-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+            background: var(--gradient-2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .nav-menu {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
+
+        .nav-item {
+            cursor: pointer;
+            color: var(--text-secondary);
+            transition: color 0.3s ease;
+            font-weight: 500;
+        }
+
+        .nav-item:hover,
+        .nav-item.active {
+            color: var(--accent-primary);
+        }
+
+        .theme-toggle {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            padding: 0.5rem 1rem;
+            border-radius: 50px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: all 0.3s ease;
+        }
+
+        .theme-toggle:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-card);
+        }
+
+        /* Main Content */
+        .main-content {
+            margin-top: 80px;
+            padding: 2rem;
+            max-width: 1400px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .section {
+            display: none;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .section.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Hero Section */
+        .hero {
+            text-align: center;
+            padding: 4rem 0;
+            background: var(--gradient-1);
+            border-radius: 20px;
+            margin-bottom: 3rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+            animation: rotate 20s linear infinite;
+        }
+
+        @keyframes rotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        .hero h1 {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            position: relative;
+            z-index: 1;
+            color: white;
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            opacity: 0.95;
+            position: relative;
+            z-index: 1;
+            color: white;
+        }
+
+        /* Cards */
+        .card {
+            background: var(--bg-card);
+            border-radius: 15px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            border: 1px solid var(--border-color);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-card);
+        }
+
+        .card-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .card-icon {
+            font-size: 2rem;
+            width: 50px;
+            height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--gradient-2);
+            border-radius: 10px;
+        }
+
+        .card-title {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: var(--text-primary);
+        }
+
+        /* Country Comparison */
+        .country-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .country-card {
+            background: var(--bg-card);
+            border-radius: 15px;
+            padding: 1.5rem;
+            border: 2px solid transparent;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .country-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: var(--gradient-2);
+        }
+
+        .country-card:hover {
+            border-color: var(--accent-primary);
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-card);
+        }
+
+        .country-flag {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+
+        .country-name {
+            font-size: 1.3rem;
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+            color: var(--text-primary);
+        }
+
+        .country-status {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+
+        .status-operational {
+            background: rgba(82, 196, 26, 0.2);
+            color: var(--accent-success);
+        }
+
+        .status-development {
+            background: rgba(0, 212, 255, 0.2);
+            color: var(--accent-primary);
+        }
+
+        .status-research {
+            background: rgba(255, 230, 109, 0.2);
+            color: var(--accent-quaternary);
+        }
+
+        .country-stats {
+            margin-top: 1rem;
+        }
+
+        .stat-item {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 0.5rem;
+            padding: 0.5rem 0;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .stat-label {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        .stat-value {
+            font-weight: bold;
+            color: var(--accent-primary);
+        }
+
+        /* Progress Bars */
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: var(--border-color);
+            border-radius: 4px;
+            overflow: hidden;
+            margin-top: 0.5rem;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: var(--gradient-2);
+            border-radius: 4px;
+            transition: width 1s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .progress-fill::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+            animation: shimmer 2s infinite;
+        }
+
+        @keyframes shimmer {
+            from { transform: translateX(-100%); }
+            to { transform: translateX(100%); }
+        }
+
+        /* Technical Specs */
+        .specs-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+
+        .spec-card {
+            background: linear-gradient(135deg, var(--bg-card) 0%, var(--bg-secondary) 100%);
+            border-radius: 10px;
+            padding: 1.5rem;
+            text-align: center;
+            border: 1px solid var(--border-color);
+            transition: all 0.3s ease;
+        }
+
+        .spec-card:hover {
+            transform: scale(1.05);
+            box-shadow: var(--shadow-card);
+        }
+
+        .spec-value {
+            font-size: 2rem;
+            font-weight: bold;
+            background: var(--gradient-2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 0.5rem;
+        }
+
+        .spec-label {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        /* Timeline */
+        .timeline {
+            position: relative;
+            padding: 2rem 0;
+        }
+
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 50%;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background: var(--gradient-2);
+            transform: translateX(-50%);
+        }
+
+        .timeline-item {
+            position: relative;
+            margin-bottom: 3rem;
+            display: flex;
+            align-items: center;
+        }
+
+        .timeline-item:nth-child(odd) {
+            flex-direction: row-reverse;
+        }
+
+        .timeline-content {
+            flex: 1;
+            background: var(--bg-card);
+            padding: 1.5rem;
+            border-radius: 10px;
+            border: 1px solid var(--border-color);
+            margin: 0 2rem;
+            transition: all 0.3s ease;
+        }
+
+        .timeline-content:hover {
+            transform: scale(1.02);
+            box-shadow: var(--shadow-card);
+        }
+
+        .timeline-date {
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--gradient-2);
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-weight: bold;
+            z-index: 1;
+        }
+
+        .timeline-dot {
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 20px;
+            height: 20px;
+            background: var(--bg-primary);
+            border: 4px solid var(--accent-primary);
+            border-radius: 50%;
+            z-index: 2;
+        }
+
+        /* Charts */
+        .chart-container {
+            position: relative;
+            height: 400px;
+            margin: 2rem 0;
+            background: var(--bg-card);
+            border-radius: 15px;
+            padding: 2rem;
+            border: 1px solid var(--border-color);
+        }
+
+        .chart-svg {
+            width: 100%;
+            height: 100%;
+        }
+
+        /* Interactive Elements */
+        .interactive-demo {
+            background: var(--bg-card);
+            border-radius: 15px;
+            padding: 2rem;
+            margin: 2rem 0;
+            border: 1px solid var(--border-color);
+        }
+
+        .depth-slider {
+            width: 100%;
+            margin: 2rem 0;
+        }
+
+        .depth-display {
+            text-align: center;
+            margin: 2rem 0;
+        }
+
+        .depth-value {
+            font-size: 3rem;
+            font-weight: bold;
+            background: var(--gradient-2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .depth-benefits {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-top: 2rem;
+        }
+
+        .benefit-card {
+            background: linear-gradient(135deg, var(--bg-secondary) 0%, var(--bg-card) 100%);
+            padding: 1rem;
+            border-radius: 10px;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .benefit-card:hover {
+            transform: translateY(-3px);
+            box-shadow: var(--shadow-card);
+        }
+
+        .benefit-icon {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .benefit-value {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: var(--accent-primary);
+            margin-bottom: 0.25rem;
+        }
+
+        .benefit-label {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+        }
+
+        /* Comparison Table */
+        .comparison-table {
+            overflow-x: auto;
+            margin: 2rem 0;
+        }
+
+        .comparison-table table {
+            width: 100%;
+            border-collapse: collapse;
+            background: var(--bg-card);
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .comparison-table th,
+        .comparison-table td {
+            padding: 1rem;
+            text-align: left;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .comparison-table th {
+            background: var(--bg-secondary);
+            font-weight: bold;
+            color: var(--text-primary);
+        }
+
+        .comparison-table tr:hover {
+            background: var(--bg-secondary);
+        }
+
+        .comparison-table .country-col {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        /* Reactor Visualization */
+        .reactor-viz {
+            position: relative;
+            height: 600px;
+            margin: 2rem 0;
+            background: var(--bg-card);
+            border-radius: 15px;
+            overflow: hidden;
+        }
+
+        .reactor-layer {
+            position: absolute;
+            width: 100%;
+            transition: all 0.5s ease;
+        }
+
+        .surface-layer {
+            top: 0;
+            height: 30%;
+            background: linear-gradient(180deg, #87CEEB 0%, #98D8E8 100%);
+        }
+
+        body.light-mode .surface-layer {
+            background: linear-gradient(180deg, #87CEEB 0%, #98D8E8 100%);
+        }
+
+        body:not(.light-mode) .surface-layer {
+            background: linear-gradient(180deg, #1e3c72 0%, #2a5298 100%);
+        }
+
+        .ground-layer {
+            top: 30%;
+            height: 70%;
+            background: linear-gradient(180deg, #8B7355 0%, #6B5945 50%, #4B3925 100%);
+        }
+
+        .reactor-core {
+            position: absolute;
+            left: 50%;
+            top: 60%;
+            transform: translate(-50%, -50%);
+            width: 120px;
+            height: 150px;
+            background: var(--gradient-3);
+            border-radius: 10px;
+            box-shadow: 0 0 50px rgba(255, 107, 107, 0.5);
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { box-shadow: 0 0 30px rgba(255, 107, 107, 0.5); }
+            50% { box-shadow: 0 0 60px rgba(255, 107, 107, 0.8); }
+        }
+
+        .reactor-info {
+            position: absolute;
+            background: var(--bg-card);
+            padding: 1rem;
+            border-radius: 10px;
+            border: 1px solid var(--border-color);
+            font-size: 0.9rem;
+            box-shadow: var(--shadow-card);
+        }
+
+        .info-surface {
+            top: 10%;
+            left: 20%;
+        }
+
+        .info-underground {
+            bottom: 20%;
+            right: 20%;
+        }
+
+        /* Loading Animation */
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid var(--border-color);
+            border-top-color: var(--accent-primary);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .nav-menu {
+                display: none;
+            }
+
+            .hero h1 {
+                font-size: 2rem;
+            }
+
+            .country-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .timeline::before {
+                left: 30px;
+            }
+
+            .timeline-item {
+                flex-direction: row !important;
+            }
+
+            .timeline-date {
+                left: 30px;
+            }
+
+            .timeline-dot {
+                left: 30px;
+            }
+
+            .timeline-content {
+                margin-left: 80px;
+                margin-right: 0;
+            }
+        }
+
+        /* Animations */
+        .fade-in {
+            animation: fadeIn 0.5s ease;
+        }
+
+        .slide-up {
+            animation: slideUp 0.5s ease;
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .scale-in {
+            animation: scaleIn 0.5s ease;
+        }
+
+        @keyframes scaleIn {
+            from {
+                opacity: 0;
+                transform: scale(0.9);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="header-content">
+            <div class="logo">
+                ⚛️ Thorium Nuclear Facilities
+            </div>
+            <nav>
+                <ul class="nav-menu">
+                    <li class="nav-item active" data-section="overview">Overview</li>
+                    <li class="nav-item" data-section="countries">Countries</li>
+                    <li class="nav-item" data-section="technical">Technical</li>
+                    <li class="nav-item" data-section="comparison">Comparison</li>
+                    <li class="nav-item" data-section="timeline">Timeline</li>
+                </ul>
+            </nav>
+            <button class="theme-toggle">
+                <span class="theme-icon">🌙</span>
+                <span class="theme-text">Dark</span>
+            </button>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <!-- Overview Section -->
+        <section id="overview" class="section active">
+            <div class="hero">
+                <h1>🔬 Dual-Level Thorium Nuclear Facilities</h1>
+                <p>Revolutionary Engineering for Next-Generation Clean Energy</p>
+            </div>
+
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-icon">🌍</div>
+                    <h2 class="card-title">Global Overview</h2>
+                </div>
+                <div class="specs-grid">
+                    <div class="spec-card">
+                        <div class="spec-value">9</div>
+                        <div class="spec-label">Countries Involved</div>
+                    </div>
+                    <div class="spec-card">
+                        <div class="spec-value">2023</div>
+                        <div class="spec-label">First Operational Reactor</div>
+                    </div>
+                    <div class="spec-card">
+                        <div class="spec-value">400-800m</div>
+                        <div class="spec-label">Optimal Depth</div>
+                    </div>
+                    <div class="spec-card">
+                        <div class="spec-value">70%</div>
+                        <div class="spec-label">Seismic Reduction</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-icon">⚡</div>
+                    <h2 class="card-title">Key Advantages</h2>
+                </div>
+                <div class="depth-benefits">
+                    <div class="benefit-card">
+                        <div class="benefit-icon">🛡️</div>
+                        <div class="benefit-value">Enhanced</div>
+                        <div class="benefit-label">Security & Safety</div>
+                    </div>
+                    <div class="benefit-card">
+                        <div class="benefit-icon">🌡️</div>
+                        <div class="benefit-value">Stable</div>
+                        <div class="benefit-label">Thermal Management</div>
+                    </div>
+                    <div class="benefit-card">
+                        <div class="benefit-icon">🏔️</div>
+                        <div class="benefit-value">Natural</div>
+                        <div class="benefit-label">Geological Protection</div>
+                    </div>
+                    <div class="benefit-card">
+                        <div class="benefit-icon">♻️</div>
+                        <div class="benefit-value">300 Years</div>
+                        <div class="benefit-label">Waste Management</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="interactive-demo">
+                <h3>🎯 Interactive Depth Analysis</h3>
+                <div class="depth-display">
+                    <div class="depth-value"><span id="depthValue">600</span>m</div>
+                    <div>Underground Depth</div>
+                </div>
+                <input type="range" class="depth-slider" id="depthSlider" min="0" max="1600" value="600" step="100">
+                <div class="depth-benefits" id="depthBenefits">
+                    <div class="benefit-card">
+                        <div class="benefit-icon">📉</div>
+                        <div class="benefit-value" id="seismicReduction">65%</div>
+                        <div class="benefit-label">Seismic Reduction</div>
+                    </div>
+                    <div class="benefit-card">
+                        <div class="benefit-icon">🌡️</div>
+                        <div class="benefit-value" id="thermalStability">High</div>
+                        <div class="benefit-label">Thermal Stability</div>
+                    </div>
+                    <div class="benefit-card">
+                        <div class="benefit-icon">🛡️</div>
+                        <div class="benefit-value" id="protectionLevel">Excellent</div>
+                        <div class="benefit-label">Protection Level</div>
+                    </div>
+                    <div class="benefit-card">
+                        <div class="benefit-icon">💰</div>
+                        <div class="benefit-value" id="costFactor">Moderate</div>
+                        <div class="benefit-label">Construction Cost</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Countries Section -->
+        <section id="countries" class="section">
+            <div class="hero">
+                <h1>🌐 Global Thorium Programs</h1>
+                <p>Leading Nations in Advanced Nuclear Technology</p>
+            </div>
+
+            <div class="country-grid">
+                <div class="country-card">
+                    <div class="country-flag">🇨🇳</div>
+                    <div class="country-name">China</div>
+                    <div class="country-status status-operational">Operational</div>
+                    <div class="country-stats">
+                        <div class="stat-item">
+                            <span class="stat-label">Reactor</span>
+                            <span class="stat-value">TMSR-LF1</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-label">Status</span>
+                            <span class="stat-value">Operating</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-label">Power</span>
+                            <span class="stat-value">2 MWt</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-label">Achievement</span>
+                            <span class="stat-value">World's First</span>
+                        </div>
+                    </div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: 100%"></div>
+                    </div>
+                </div>
+
+                <div class="country-card">
+                    <div class="country-flag">🇺🇸</div>
+                    <div class="country-name">United States</div>
+                    <div class="country-status status-development">Development</div>
+                    <div class="country-stats">
+                        <div class="stat-item">
+                            <span class="stat-label">Focus</span>
+                            <span class="stat-value">Fuel Development</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-label">Investment</span>
+                            <span class="stat-value">$1.6B (2025)</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-label">Lab</span>
+                            <span class="stat-value">Oak Ridge</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-label">Target</span>
+                            <span class="stat-value">2026</span>
+                        </div>
+                    </div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: 75%"></div>
+                    </div>
+                </div>
+
+                <div class="country-card">
+                    <div class="country-flag">🇮🇳</div>
+                    <div class="country-name">India</div>
+                    <div class="country-status status-development">Development</div>
+                    <div class="country-stats">
+                        <div class="stat-item">
+                            <span class="stat-label">Program</span>
+                            <span class="stat-value">AHWR</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-label">Capacity</span>
+                            <span class="stat-value">300 MWe</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-label">Institute</span>
+                            <span class="stat-value">BARC</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-label">Design Life</span>
+                            <span class="stat-value">100 years</span>
+                        </div>
+                    </div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: 80%"></div>
+                    </div>
+                </div>
+
+                <div class="country-card">
+                    <div class="country-flag">🇫🇷</div>
+                    <div class="country-name">France</div>
+                    <div class="country-status status-research">Research</div>
+                    <div class="country-stats">
+                        <div class="stat-item">
+                            <span class="stat-label">Funding</span>
+                            <span class="stat-value">€20M</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-label">Companies</span>
+                            <span class="stat-value">Stellaria, Thorizon</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-label">Target</span>
+                            <span class="stat-value">2033</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-label">Type</span>
+                            <span class="stat-value">Fast Reactor</span>
+                        </div>
+                    </div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: 45%"></div>
+                    </div>
+                </div>
+
+                <div class="country-card">
+                    <div class="country-flag">🇳🇴</div>
+                    <div class="country-name">Norway</div>
+                    <div class="country-status status-research">Research</div>
+                    <div class="country-stats">
+                        <div class="stat-item">
+                            <span class="stat-label">Company</span>
+                            <span class="stat-value">Thor Energy</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-label">Testing</span>
+                            <span class="stat-value">5 years</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-label">Burnup</span>
+                            <span class="stat-value">38 GWd/t</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-label">Focus</span>
+                            <span class="stat-value">Th-MOX Fuel</span>
+                        </div>
+                    </div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: 60%"></div>
+                    </div>
+                </div>
+
+                <div class="country-card">
+                    <div class="country-flag">🇯🇵</div>
+                    <div class="country-name">Japan</div>
+                    <div class="country-status status-research">Research</div>
+                    <div class="country-stats">
+                        <div class="stat-item">
+                            <span class="stat-label">Institute</span>
+                            <span class="stat-value">JAEA</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-label">University</span>
+                            <span class="stat-value">Kyoto</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-label">Facility</span>
+                            <span class="stat-value">KUCA</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-label">Focus</span>
+                            <span class="stat-value">LWR/FBR</span>
+                        </div>
+                    </div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: 50%"></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Technical Section -->
+        <section id="technical" class="section">
+            <div class="hero">
+                <h1>🔧 Technical Specifications</h1>
+                <p>Engineering Excellence in Dual-Level Design</p>
+            </div>
+
+            <div class="reactor-viz">
+                <div class="reactor-layer surface-layer"></div>
+                <div class="reactor-layer ground-layer"></div>
+                <div class="reactor-core"></div>
+                <div class="reactor-info info-surface">
+                    <strong>Surface Level</strong><br>
+                    • Control Systems<br>
+                    • Power Generation<br>
+                    • Administration
+                </div>
+                <div class="reactor-info info-underground">
+                    <strong>Underground Level</strong><br>
+                    • Reactor Core<br>
+                    • Heat Exchangers<br>
+                    • Fuel Processing
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-icon">⚙️</div>
+                    <h2 class="card-title">Core Parameters</h2>
+                </div>
+                <div class="specs-grid">
+                    <div class="spec-card">
+                        <div class="spec-value">700°C</div>
+                        <div class="spec-label">Operating Temperature</div>
+                    </div>
+                    <div class="spec-card">
+                        <div class="spec-value">FLiBe</div>
+                        <div class="spec-label">Coolant Type</div>
+                    </div>
+                    <div class="spec-card">
+                        <div class="spec-value">99.95%</div>
+                        <div class="spec-label">Li-7 Purity</div>
+                    </div>
+                    <div class="spec-card">
+                        <div class="spec-value">27 days</div>
+                        <div class="spec-label">Pa-233 Decay</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-icon">🏗️</div>
+                    <h2 class="card-title">Structural Design</h2>
+                </div>
+                <div class="comparison-table">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Component</th>
+                                <th>Specification</th>
+                                <th>Material</th>
+                                <th>Thickness</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Reactor Vault</td>
+                                <td>3-5m concrete</td>
+                                <td>Nuclear-grade reinforced</td>
+                                <td>Steel liner</td>
+                            </tr>
+                            <tr>
+                                <td>Access Shaft</td>
+                                <td>6-8m diameter</td>
+                                <td>Reinforced concrete</td>
+                                <td>1m walls</td>
+                            </tr>
+                            <tr>
+                                <td>Biological Shield</td>
+                                <td>Primary containment</td>
+                                <td>Heavy concrete</td>
+                                <td>1.5-2.5m</td>
+                            </tr>
+                            <tr>
+                                <td>Fuel Handling</td>
+                                <td>Remote operation</td>
+                                <td>Lead glass viewing</td>
+                                <td>2-3m concrete</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <!-- Comparison Section -->
+        <section id="comparison" class="section">
+            <div class="hero">
+                <h1>📊 Global Comparison</h1>
+                <p>Analyzing International Thorium Programs</p>
+            </div>
+
+            <div class="chart-container">
+                <svg class="chart-svg" id="comparisonChart"></svg>
+            </div>
+
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-icon">🏆</div>
+                    <h2 class="card-title">Country Rankings</h2>
+                </div>
+                <div class="comparison-table">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Country</th>
+                                <th>Development Stage</th>
+                                <th>Investment</th>
+                                <th>Timeline</th>
+                                <th>Key Achievement</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><div class="country-col">🇨🇳 China</div></td>
+                                <td><span class="country-status status-operational">Operational</span></td>
+                                <td>¥3 Billion</td>
+                                <td>2023 (Achieved)</td>
+                                <td>World's first operational MSR</td>
+                            </tr>
+                            <tr>
+                                <td><div class="country-col">🇮🇳 India</div></td>
+                                <td><span class="country-status status-development">Advanced Dev</span></td>
+                                <td>Significant</td>
+                                <td>2025-2030</td>
+                                <td>300 MWe AHWR design</td>
+                            </tr>
+                            <tr>
+                                <td><div class="country-col">🇺🇸 USA</div></td>
+                                <td><span class="country-status status-development">Development</span></td>
+                                <td>$1.6 Billion</td>
+                                <td>2026</td>
+                                <td>ANEEL fuel testing</td>
+                            </tr>
+                            <tr>
+                                <td><div class="country-col">🇫🇷 France</div></td>
+                                <td><span class="country-status status-research">Research</span></td>
+                                <td>€20 Million</td>
+                                <td>2033</td>
+                                <td>Ultra-compact design</td>
+                            </tr>
+                            <tr>
+                                <td><div class="country-col">🇳🇴 Norway</div></td>
+                                <td><span class="country-status status-research">Research</span></td>
+                                <td>Moderate</td>
+                                <td>Ongoing</td>
+                                <td>Th-MOX fuel validation</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-icon">💡</div>
+                    <h2 class="card-title">Technology Comparison</h2>
+                </div>
+                <div class="specs-grid">
+                    <div class="spec-card">
+                        <div class="spec-value">MSR</div>
+                        <div class="spec-label">China, USA</div>
+                    </div>
+                    <div class="spec-card">
+                        <div class="spec-value">AHWR</div>
+                        <div class="spec-label">India</div>
+                    </div>
+                    <div class="spec-card">
+                        <div class="spec-value">Fast Reactor</div>
+                        <div class="spec-label">France</div>
+                    </div>
+                    <div class="spec-card">
+                        <div class="spec-value">Th-MOX</div>
+                        <div class="spec-label">Norway</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Timeline Section -->
+        <section id="timeline" class="section">
+            <div class="hero">
+                <h1>📅 Development Timeline</h1>
+                <p>Milestones in Thorium Nuclear Technology</p>
+            </div>
+
+            <div class="timeline">
+                <div class="timeline-item">
+                    <div class="timeline-dot"></div>
+                    <div class="timeline-date">1965-1969</div>
+                    <div class="timeline-content">
+                        <h3>🇺🇸 Oak Ridge MSRE</h3>
+                        <p>First molten salt reactor demonstration with 15,000+ hours of operation</p>
+                    </div>
+                </div>
+
+                <div class="timeline-item">
+                    <div class="timeline-dot"></div>
+                    <div class="timeline-date">2011</div>
+                    <div class="timeline-content">
+                        <h3>🇨🇳 China Program Launch</h3>
+                        <p>¥3 billion investment in thorium MSR development begins</p>
+                    </div>
+                </div>
+
+                <div class="timeline-item">
+                    <div class="timeline-dot"></div>
+                    <div class="timeline-date">2013-2018</div>
+                    <div class="timeline-content">
+                        <h3>🇳🇴 Norway Testing</h3>
+                        <p>Thor Energy completes 5-year thorium fuel irradiation trials</p>
+                    </div>
+                </div>
+
+                <div class="timeline-item">
+                    <div class="timeline-dot"></div>
+                    <div class="timeline-date">Oct 2023</div>
+                    <div class="timeline-content">
+                        <h3>🇨🇳 TMSR-LF1 Critical</h3>
+                        <p>World's first operational thorium MSR achieves criticality</p>
+                    </div>
+                </div>
+
+                <div class="timeline-item">
+                    <div class="timeline-dot"></div>
+                    <div class="timeline-date">June 2024</div>
+                    <div class="timeline-content">
+                        <h3>🇨🇳 Full Power Operation</h3>
+                        <p>TMSR-LF1 reaches full 2 MWt power operation</p>
+                    </div>
+                </div>
+
+                <div class="timeline-item">
+                    <div class="timeline-dot"></div>
+                    <div class="timeline-date">Oct 2024</div>
+                    <div class="timeline-content">
+                        <h3>🇨🇳 Online Refueling</h3>
+                        <p>World's first successful online refueling while operating</p>
+                    </div>
+                </div>
+
+                <div class="timeline-item">
+                    <div class="timeline-dot"></div>
+                    <div class="timeline-date">2026</div>
+                    <div class="timeline-content">
+                        <h3>🇺🇸 Test Reactors</h3>
+                        <p>US aims for criticality in 3+ test reactors</p>
+                    </div>
+                </div>
+
+                <div class="timeline-item">
+                    <div class="timeline-dot"></div>
+                    <div class="timeline-date">2030</div>
+                    <div class="timeline-content">
+                        <h3>🇨🇳 Commercial Scale</h3>
+                        <p>373 MWt commercial reactor planned</p>
+                    </div>
+                </div>
+
+                <div class="timeline-item">
+                    <div class="timeline-dot"></div>
+                    <div class="timeline-date">2033</div>
+                    <div class="timeline-content">
+                        <h3>🇫🇷 First Reactor</h3>
+                        <p>Stellaria targets first reactor operation</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <script>
+        // Theme Toggle
+        const themeToggle = document.querySelector('.theme-toggle');
+        const themeIcon = document.querySelector('.theme-icon');
+        const themeText = document.querySelector('.theme-text');
+        const body = document.body;
+
+        // Check for saved theme preference
+        const currentTheme = localStorage.getItem('theme') || 'dark';
+        if (currentTheme === 'light') {
+            body.classList.add('light-mode');
+            themeIcon.textContent = '☀️';
+            themeText.textContent = 'Light';
+        }
+
+        themeToggle.addEventListener('click', () => {
+            body.classList.toggle('light-mode');
+            const isLight = body.classList.contains('light-mode');
+            
+            themeIcon.textContent = isLight ? '☀️' : '🌙';
+            themeText.textContent = isLight ? 'Light' : 'Dark';
+            
+            localStorage.setItem('theme', isLight ? 'light' : 'dark');
+        });
+
+        // Navigation
+        const navItems = document.querySelectorAll('.nav-item');
+        const sections = document.querySelectorAll('.section');
+
+        navItems.forEach(item => {
+            item.addEventListener('click', () => {
+                const targetSection = item.dataset.section;
+                
+                // Update active nav item
+                navItems.forEach(nav => nav.classList.remove('active'));
+                item.classList.add('active');
+                
+                // Update active section
+                sections.forEach(section => {
+                    section.classList.remove('active');
+                    if (section.id === targetSection) {
+                        section.classList.add('active');
+                    }
+                });
+            });
+        });
+
+        // Depth Slider Interaction
+        const depthSlider = document.getElementById('depthSlider');
+        const depthValue = document.getElementById('depthValue');
+        const seismicReduction = document.getElementById('seismicReduction');
+        const thermalStability = document.getElementById('thermalStability');
+        const protectionLevel = document.getElementById('protectionLevel');
+        const costFactor = document.getElementById('costFactor');
+
+        if (depthSlider) {
+            depthSlider.addEventListener('input', (e) => {
+                const depth = e.target.value;
+                depthValue.textContent = depth;
+                
+                // Calculate benefits based on depth
+                let seismic = Math.min(70, 20 + (depth / 1600) * 50);
+                let thermal = depth < 200 ? 'Low' : depth < 600 ? 'Moderate' : depth < 1000 ? 'High' : 'Excellent';
+                let protection = depth < 100 ? 'Basic' : depth < 400 ? 'Good' : depth < 800 ? 'Excellent' : 'Maximum';
+                let cost = depth < 200 ? 'Low' : depth < 600 ? 'Moderate' : depth < 1000 ? 'High' : 'Very High';
+                
+                seismicReduction.textContent = Math.round(seismic) + '%';
+                thermalStability.textContent = thermal;
+                protectionLevel.textContent = protection;
+                costFactor.textContent = cost;
+            });
+        }
+
+        // Create Comparison Chart
+        function createComparisonChart() {
+            const svg = document.getElementById('comparisonChart');
+            if (!svg) return;
+            
+            const data = [
+                { country: 'China 🇨🇳', progress: 100, investment: 90, timeline: 100 },
+                { country: 'India 🇮🇳', progress: 80, investment: 70, timeline: 60 },
+                { country: 'USA 🇺🇸', progress: 75, investment: 95, timeline: 50 },
+                { country: 'France 🇫🇷', progress: 45, investment: 40, timeline: 30 },
+                { country: 'Norway 🇳🇴', progress: 60, investment: 35, timeline: 70 },
+                { country: 'Japan 🇯🇵', progress: 50, investment: 45, timeline: 40 }
+            ];
+            
+            const width = svg.clientWidth;
+            const height = 400;
+            const margin = { top: 40, right: 120, bottom: 60, left: 80 };
+            const innerWidth = width - margin.left - margin.right;
+            const innerHeight = height - margin.top - margin.bottom;
+            
+            // Clear existing content
+            svg.innerHTML = '';
+            
+            // Create bars for each metric
+            const barWidth = innerWidth / (data.length * 3 + data.length - 1);
+            const spacing = barWidth * 0.5;
+            
+            // Add title
+            const title = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+            title.setAttribute('x', width / 2);
+            title.setAttribute('y', 25);
+            title.setAttribute('text-anchor', 'middle');
+            title.setAttribute('fill', 'var(--text-primary)');
+            title.setAttribute('font-size', '18');
+            title.setAttribute('font-weight', 'bold');
+            title.textContent = 'Country Comparison Metrics';
+            svg.appendChild(title);
+            
+            // Create legend
+            const legends = [
+                { label: 'Progress', color: 'var(--accent-primary)' },
+                { label: 'Investment', color: 'var(--accent-secondary)' },
+                { label: 'Timeline', color: 'var(--accent-tertiary)' }
+            ];
+            
+            legends.forEach((legend, i) => {
+                const g = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+                g.setAttribute('transform', `translate(${width - 100}, ${60 + i * 25})`);
+                
+                const rect = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
+                rect.setAttribute('width', 15);
+                rect.setAttribute('height', 15);
+                rect.setAttribute('fill', legend.color);
+                g.appendChild(rect);
+                
+                const text = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+                text.setAttribute('x', 20);
+                text.setAttribute('y', 12);
+                text.setAttribute('fill', 'var(--text-secondary)');
+                text.setAttribute('font-size', '12');
+                text.textContent = legend.label;
+                g.appendChild(text);
+                
+                svg.appendChild(g);
+            });
+            
+            // Create bars
+            data.forEach((d, i) => {
+                const groupX = margin.left + i * (barWidth * 3 + spacing);
+                
+                // Progress bar
+                const progressBar = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
+                progressBar.setAttribute('x', groupX);
+                progressBar.setAttribute('y', margin.top + innerHeight - (d.progress / 100 * innerHeight));
+                progressBar.setAttribute('width', barWidth);
+                progressBar.setAttribute('height', d.progress / 100 * innerHeight);
+                progressBar.setAttribute('fill', 'var(--accent-primary)');
+                progressBar.setAttribute('opacity', '0');
+                svg.appendChild(progressBar);
+                
+                // Animate
+                setTimeout(() => {
+                    progressBar.setAttribute('opacity', '0.8');
+                    progressBar.style.transition = 'all 0.5s ease';
+                }, i * 100);
+                
+                // Investment bar
+                const investmentBar = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
+                investmentBar.setAttribute('x', groupX + barWidth);
+                investmentBar.setAttribute('y', margin.top + innerHeight - (d.investment / 100 * innerHeight));
+                investmentBar.setAttribute('width', barWidth);
+                investmentBar.setAttribute('height', d.investment / 100 * innerHeight);
+                investmentBar.setAttribute('fill', 'var(--accent-secondary)');
+                investmentBar.setAttribute('opacity', '0');
+                svg.appendChild(investmentBar);
+                
+                setTimeout(() => {
+                    investmentBar.setAttribute('opacity', '0.8');
+                    investmentBar.style.transition = 'all 0.5s ease';
+                }, i * 100 + 50);
+                
+                // Timeline bar
+                const timelineBar = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
+                timelineBar.setAttribute('x', groupX + barWidth * 2);
+                timelineBar.setAttribute('y', margin.top + innerHeight - (d.timeline / 100 * innerHeight));
+                timelineBar.setAttribute('width', barWidth);
+                timelineBar.setAttribute('height', d.timeline / 100 * innerHeight);
+                timelineBar.setAttribute('fill', 'var(--accent-tertiary)');
+                timelineBar.setAttribute('opacity', '0');
+                svg.appendChild(timelineBar);
+                
+                setTimeout(() => {
+                    timelineBar.setAttribute('opacity', '0.8');
+                    timelineBar.style.transition = 'all 0.5s ease';
+                }, i * 100 + 100);
+                
+                // Country label
+                const label = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+                label.setAttribute('x', groupX + barWidth * 1.5);
+                label.setAttribute('y', margin.top + innerHeight + 25);
+                label.setAttribute('text-anchor', 'middle');
+                label.setAttribute('fill', 'var(--text-secondary)');
+                label.setAttribute('font-size', '12');
+                label.textContent = d.country;
+                svg.appendChild(label);
+            });
+            
+            // Add axes
+            const xAxis = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+            xAxis.setAttribute('x1', margin.left);
+            xAxis.setAttribute('y1', margin.top + innerHeight);
+            xAxis.setAttribute('x2', margin.left + innerWidth);
+            xAxis.setAttribute('y2', margin.top + innerHeight);
+            xAxis.setAttribute('stroke', 'var(--border-color)');
+            svg.appendChild(xAxis);
+            
+            const yAxis = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+            yAxis.setAttribute('x1', margin.left);
+            yAxis.setAttribute('y1', margin.top);
+            yAxis.setAttribute('x2', margin.left);
+            yAxis.setAttribute('y2', margin.top + innerHeight);
+            yAxis.setAttribute('stroke', 'var(--border-color)');
+            svg.appendChild(yAxis);
+            
+            // Add y-axis labels
+            for (let i = 0; i <= 4; i++) {
+                const value = i * 25;
+                const y = margin.top + innerHeight - (value / 100 * innerHeight);
+                
+                const label = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+                label.setAttribute('x', margin.left - 10);
+                label.setAttribute('y', y + 5);
+                label.setAttribute('text-anchor', 'end');
+                label.setAttribute('fill', 'var(--text-secondary)');
+                label.setAttribute('font-size', '11');
+                label.textContent = value + '%';
+                svg.appendChild(label);
+            }
+        }
+
+        // Initialize chart when comparison section is shown
+        navItems.forEach(item => {
+            item.addEventListener('click', () => {
+                if (item.dataset.section === 'comparison') {
+                    setTimeout(createComparisonChart, 100);
+                }
+            });
+        });
+
+        // Animate elements on scroll
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('fade-in');
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.card, .country-card, .spec-card').forEach(el => {
+            observer.observe(el);
+        });
+
+        // Animate progress bars when visible
+        const progressObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const progressFill = entry.target.querySelector('.progress-fill');
+                    if (progressFill) {
+                        const width = progressFill.style.width;
+                        progressFill.style.width = '0';
+                        setTimeout(() => {
+                            progressFill.style.width = width;
+                        }, 100);
+                    }
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.country-card').forEach(el => {
+            progressObserver.observe(el);
+        });
+
+        // Add hover effects to country cards
+        document.querySelectorAll('.country-card').forEach(card => {
+            card.addEventListener('mouseenter', () => {
+                card.style.transform = 'translateY(-10px) scale(1.02)';
+            });
+            
+            card.addEventListener('mouseleave', () => {
+                card.style.transform = 'translateY(-5px) scale(1)';
+            });
+        });
+
+        // Initialize page
+        window.addEventListener('load', () => {
+            document.body.classList.add('fade-in');
+        });
+    </script>
+</body>
+</html>
