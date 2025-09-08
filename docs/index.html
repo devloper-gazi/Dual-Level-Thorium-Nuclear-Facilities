@@ -75,6 +75,8 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
         }
 
         .logo {
@@ -90,8 +92,9 @@
 
         .nav-menu {
             display: flex;
-            gap: 2rem;
+            gap: 1.5rem;
             list-style: none;
+            flex-wrap: wrap;
         }
 
         .nav-item {
@@ -99,6 +102,7 @@
             color: var(--text-secondary);
             transition: color 0.3s ease;
             font-weight: 500;
+            padding: 0.25rem 0.5rem;
         }
 
         .nav-item:hover,
@@ -152,35 +156,20 @@
             }
         }
 
-        /* Hero Section */
+        /* Hero Section with Nuclear Animation */
         .hero {
             text-align: center;
-            padding: 4rem 0;
+            padding: 4rem 2rem;
             background: var(--gradient-1);
             border-radius: 20px;
             margin-bottom: 3rem;
             position: relative;
             overflow: hidden;
-        }
-
-        .hero::before {
-            content: '';
-            position: absolute;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
-            animation: rotate 20s linear infinite;
-        }
-
-        @keyframes rotate {
-            from { transform: rotate(0deg); }
-            to { transform: rotate(360deg); }
+            min-height: 250px;
         }
 
         .hero h1 {
-            font-size: 3rem;
+            font-size: clamp(1.5rem, 4vw, 3rem);
             margin-bottom: 1rem;
             position: relative;
             z-index: 1;
@@ -188,11 +177,109 @@
         }
 
         .hero p {
-            font-size: 1.2rem;
+            font-size: clamp(1rem, 2vw, 1.2rem);
             opacity: 0.95;
             position: relative;
             z-index: 1;
             color: white;
+        }
+
+        /* Nuclear Particle Animation */
+        .nuclear-particles {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+        }
+
+        .particle {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: rgba(255, 255, 255, 0.8);
+            border-radius: 50%;
+            box-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+        }
+
+        .electron {
+            position: absolute;
+            width: 60px;
+            height: 60px;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            animation: orbit 10s linear infinite;
+        }
+
+        .electron::after {
+            content: '';
+            position: absolute;
+            width: 8px;
+            height: 8px;
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 50%;
+            top: -4px;
+            left: 50%;
+            transform: translateX(-50%);
+            box-shadow: 0 0 15px rgba(255, 255, 255, 0.8);
+        }
+
+        @keyframes orbit {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        .nucleus {
+            position: absolute;
+            width: 30px;
+            height: 30px;
+            background: radial-gradient(circle, rgba(255,255,255,0.9) 0%, rgba(255,255,255,0.3) 100%);
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+            box-shadow: 0 0 30px rgba(255, 255, 255, 0.5);
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); opacity: 0.8; }
+            50% { transform: scale(1.2); opacity: 1; }
+        }
+
+        /* Energy Wave Animation */
+        .energy-wave {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 100px;
+            background: linear-gradient(transparent, rgba(255,255,255,0.05));
+            animation: wave 4s ease-in-out infinite;
+        }
+
+        .energy-wave::before,
+        .energy-wave::after {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: inherit;
+        }
+
+        .energy-wave::before {
+            animation: wave 4s ease-in-out infinite;
+            animation-delay: 0.5s;
+            opacity: 0.5;
+        }
+
+        .energy-wave::after {
+            animation: wave 4s ease-in-out infinite;
+            animation-delay: 1s;
+            opacity: 0.3;
+        }
+
+        @keyframes wave {
+            0%, 100% { transform: translateY(0) scaleY(1); }
+            50% { transform: translateY(-20px) scaleY(0.8); }
         }
 
         /* Cards */
@@ -217,6 +304,7 @@
             align-items: center;
             gap: 1rem;
             margin-bottom: 1.5rem;
+            flex-wrap: wrap;
         }
 
         .card-icon {
@@ -231,7 +319,7 @@
         }
 
         .card-title {
-            font-size: 1.5rem;
+            font-size: clamp(1.2rem, 3vw, 1.5rem);
             font-weight: bold;
             color: var(--text-primary);
         }
@@ -239,8 +327,8 @@
         /* Country Comparison */
         .country-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 2rem;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
             margin-top: 2rem;
         }
 
@@ -307,6 +395,11 @@
             color: var(--accent-quaternary);
         }
 
+        .status-planning {
+            background: rgba(128, 128, 128, 0.2);
+            color: #808080;
+        }
+
         .country-stats {
             margin-top: 1rem;
         }
@@ -317,6 +410,8 @@
             margin-bottom: 0.5rem;
             padding: 0.5rem 0;
             border-bottom: 1px solid var(--border-color);
+            flex-wrap: wrap;
+            gap: 0.5rem;
         }
 
         .stat-label {
@@ -327,6 +422,8 @@
         .stat-value {
             font-weight: bold;
             color: var(--accent-primary);
+            text-align: right;
+            font-size: 0.9rem;
         }
 
         /* Progress Bars */
@@ -367,7 +464,7 @@
         /* Technical Specs */
         .specs-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
             gap: 1.5rem;
             margin-top: 2rem;
         }
@@ -387,7 +484,7 @@
         }
 
         .spec-value {
-            font-size: 2rem;
+            font-size: clamp(1.5rem, 3vw, 2rem);
             font-weight: bold;
             background: var(--gradient-2);
             -webkit-background-clip: text;
@@ -419,7 +516,7 @@
 
         .timeline-item {
             position: relative;
-            margin-bottom: 3rem;
+            margin-bottom: 4rem;
             display: flex;
             align-items: center;
         }
@@ -446,6 +543,7 @@
         .timeline-date {
             position: absolute;
             left: 50%;
+            top: -25px;
             transform: translateX(-50%);
             background: var(--gradient-2);
             color: white;
@@ -453,6 +551,8 @@
             border-radius: 20px;
             font-weight: bold;
             z-index: 1;
+            white-space: nowrap;
+            font-size: 0.9rem;
         }
 
         .timeline-dot {
@@ -470,17 +570,19 @@
         /* Charts */
         .chart-container {
             position: relative;
-            height: 400px;
+            min-height: 400px;
             margin: 2rem 0;
             background: var(--bg-card);
             border-radius: 15px;
             padding: 2rem;
             border: 1px solid var(--border-color);
+            overflow-x: auto;
         }
 
         .chart-svg {
             width: 100%;
             height: 100%;
+            min-width: 600px;
         }
 
         /* Interactive Elements */
@@ -503,7 +605,7 @@
         }
 
         .depth-value {
-            font-size: 3rem;
+            font-size: clamp(2rem, 5vw, 3rem);
             font-weight: bold;
             background: var(--gradient-2);
             -webkit-background-clip: text;
@@ -512,7 +614,7 @@
 
         .depth-benefits {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
             gap: 1rem;
             margin-top: 2rem;
         }
@@ -536,7 +638,7 @@
         }
 
         .benefit-value {
-            font-size: 1.5rem;
+            font-size: clamp(1.2rem, 2vw, 1.5rem);
             font-weight: bold;
             color: var(--accent-primary);
             margin-bottom: 0.25rem;
@@ -555,6 +657,7 @@
 
         .comparison-table table {
             width: 100%;
+            min-width: 600px;
             border-collapse: collapse;
             background: var(--bg-card);
             border-radius: 10px;
@@ -572,6 +675,7 @@
             background: var(--bg-secondary);
             font-weight: bold;
             color: var(--text-primary);
+            white-space: nowrap;
         }
 
         .comparison-table tr:hover {
@@ -630,10 +734,10 @@
             background: var(--gradient-3);
             border-radius: 10px;
             box-shadow: 0 0 50px rgba(255, 107, 107, 0.5);
-            animation: pulse 2s infinite;
+            animation: reactor-pulse 2s infinite;
         }
 
-        @keyframes pulse {
+        @keyframes reactor-pulse {
             0%, 100% { box-shadow: 0 0 30px rgba(255, 107, 107, 0.5); }
             50% { box-shadow: 0 0 60px rgba(255, 107, 107, 0.8); }
         }
@@ -650,12 +754,14 @@
 
         .info-surface {
             top: 10%;
-            left: 20%;
+            left: 10%;
+            right: auto;
         }
 
         .info-underground {
             bottom: 20%;
-            right: 20%;
+            right: 10%;
+            left: auto;
         }
 
         /* Loading Animation */
@@ -673,18 +779,56 @@
             to { transform: rotate(360deg); }
         }
 
+        /* Mobile Menu Toggle */
+        .mobile-menu-toggle {
+            display: none;
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            padding: 0.5rem;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
         /* Responsive Design */
-        @media (max-width: 768px) {
+        @media (max-width: 968px) {
+            .header-content {
+                padding: 0.5rem;
+            }
+
             .nav-menu {
+                position: fixed;
+                top: 70px;
+                left: 0;
+                right: 0;
+                background: var(--bg-secondary);
+                flex-direction: column;
+                padding: 1rem;
+                border-bottom: 1px solid var(--border-color);
                 display: none;
             }
 
-            .hero h1 {
-                font-size: 2rem;
+            .nav-menu.active {
+                display: flex;
+            }
+
+            .mobile-menu-toggle {
+                display: block;
+            }
+
+            .main-content {
+                padding: 1rem;
             }
 
             .country-grid {
                 grid-template-columns: 1fr;
+            }
+
+            .specs-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .depth-benefits {
+                grid-template-columns: repeat(2, 1fr);
             }
 
             .timeline::before {
@@ -696,7 +840,9 @@
             }
 
             .timeline-date {
-                left: 30px;
+                left: 60px !important;
+                top: -20px;
+                font-size: 0.8rem;
             }
 
             .timeline-dot {
@@ -704,8 +850,58 @@
             }
 
             .timeline-content {
-                margin-left: 80px;
-                margin-right: 0;
+                margin-left: 60px !important;
+                margin-right: 0 !important;
+            }
+
+            .timeline-content h3 {
+                font-size: 1.1rem;
+            }
+
+            .reactor-info {
+                font-size: 0.8rem;
+                padding: 0.5rem;
+            }
+
+            .info-surface {
+                left: 5%;
+                top: 5%;
+            }
+
+            .info-underground {
+                right: 5%;
+                bottom: 10%;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .logo {
+                font-size: 1.2rem;
+            }
+
+            .hero {
+                padding: 2rem 1rem;
+            }
+
+            .card {
+                padding: 1.5rem;
+            }
+
+            .specs-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .depth-benefits {
+                grid-template-columns: 1fr;
+            }
+
+            .comparison-table {
+                font-size: 0.85rem;
+            }
+
+            .comparison-table th,
+            .comparison-table td {
+                padding: 0.5rem;
             }
         }
 
@@ -752,8 +948,9 @@
             <div class="logo">
                 ⚛️ Thorium Nuclear Facilities
             </div>
+            <button class="mobile-menu-toggle" id="mobileMenuToggle">☰</button>
             <nav>
-                <ul class="nav-menu">
+                <ul class="nav-menu" id="navMenu">
                     <li class="nav-item active" data-section="overview">Overview</li>
                     <li class="nav-item" data-section="countries">Countries</li>
                     <li class="nav-item" data-section="technical">Technical</li>
@@ -773,6 +970,8 @@
         <!-- Overview Section -->
         <section id="overview" class="section active">
             <div class="hero">
+                <div class="nuclear-particles"></div>
+                <div class="energy-wave"></div>
                 <h1>🔬 Dual-Level Thorium Nuclear Facilities</h1>
                 <p>Revolutionary Engineering for Next-Generation Clean Energy</p>
             </div>
@@ -784,7 +983,7 @@
                 </div>
                 <div class="specs-grid">
                     <div class="spec-card">
-                        <div class="spec-value">9</div>
+                        <div class="spec-value">9+</div>
                         <div class="spec-label">Countries Involved</div>
                     </div>
                     <div class="spec-card">
@@ -866,6 +1065,8 @@
         <!-- Countries Section -->
         <section id="countries" class="section">
             <div class="hero">
+                <div class="nuclear-particles"></div>
+                <div class="energy-wave"></div>
                 <h1>🌐 Global Thorium Programs</h1>
                 <p>Leading Nations in Advanced Nuclear Technology</p>
             </div>
@@ -889,8 +1090,12 @@
                             <span class="stat-value">2 MWt</span>
                         </div>
                         <div class="stat-item">
+                            <span class="stat-label">Investment</span>
+                            <span class="stat-value">¥3 Billion</span>
+                        </div>
+                        <div class="stat-item">
                             <span class="stat-label">Achievement</span>
-                            <span class="stat-value">World's First</span>
+                            <span class="stat-value">World's First MSR</span>
                         </div>
                     </div>
                     <div class="progress-bar">
@@ -909,15 +1114,19 @@
                         </div>
                         <div class="stat-item">
                             <span class="stat-label">Investment</span>
-                            <span class="stat-value">$1.6B (2025)</span>
+                            <span class="stat-value">$1.6B (FY2025)</span>
                         </div>
                         <div class="stat-item">
                             <span class="stat-label">Lab</span>
                             <span class="stat-value">Oak Ridge</span>
                         </div>
                         <div class="stat-item">
+                            <span class="stat-label">Private Funding</span>
+                            <span class="stat-value">$15.5M (Clean Core)</span>
+                        </div>
+                        <div class="stat-item">
                             <span class="stat-label">Target</span>
-                            <span class="stat-value">2026</span>
+                            <span class="stat-value">2026 (3 Reactors)</span>
                         </div>
                     </div>
                     <div class="progress-bar">
@@ -932,7 +1141,7 @@
                     <div class="country-stats">
                         <div class="stat-item">
                             <span class="stat-label">Program</span>
-                            <span class="stat-value">AHWR</span>
+                            <span class="stat-value">AHWR/IMSBR</span>
                         </div>
                         <div class="stat-item">
                             <span class="stat-label">Capacity</span>
@@ -941,6 +1150,10 @@
                         <div class="stat-item">
                             <span class="stat-label">Institute</span>
                             <span class="stat-value">BARC</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-label">Investment</span>
+                            <span class="stat-value">Major National</span>
                         </div>
                         <div class="stat-item">
                             <span class="stat-label">Design Life</span>
@@ -959,15 +1172,19 @@
                     <div class="country-stats">
                         <div class="stat-item">
                             <span class="stat-label">Funding</span>
-                            <span class="stat-value">€20M</span>
+                            <span class="stat-value">€20M (France 2030)</span>
                         </div>
                         <div class="stat-item">
                             <span class="stat-label">Companies</span>
                             <span class="stat-value">Stellaria, Thorizon</span>
                         </div>
                         <div class="stat-item">
+                            <span class="stat-label">Grants</span>
+                            <span class="stat-value">€10M each</span>
+                        </div>
+                        <div class="stat-item">
                             <span class="stat-label">Target</span>
-                            <span class="stat-value">2033</span>
+                            <span class="stat-value">2033 (First Reactor)</span>
                         </div>
                         <div class="stat-item">
                             <span class="stat-label">Type</span>
@@ -990,7 +1207,11 @@
                         </div>
                         <div class="stat-item">
                             <span class="stat-label">Testing</span>
-                            <span class="stat-value">5 years</span>
+                            <span class="stat-value">5 years (2013-2018)</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-label">Investment</span>
+                            <span class="stat-value">Gov + Private</span>
                         </div>
                         <div class="stat-item">
                             <span class="stat-label">Burnup</span>
@@ -1017,19 +1238,116 @@
                         </div>
                         <div class="stat-item">
                             <span class="stat-label">University</span>
-                            <span class="stat-value">Kyoto</span>
+                            <span class="stat-value">Kyoto (KUCA)</span>
                         </div>
                         <div class="stat-item">
-                            <span class="stat-label">Facility</span>
-                            <span class="stat-value">KUCA</span>
+                            <span class="stat-label">Investment</span>
+                            <span class="stat-value">Academic + Gov</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-label">Committees</span>
+                            <span class="stat-value">2 (Since 2013)</span>
                         </div>
                         <div class="stat-item">
                             <span class="stat-label">Focus</span>
-                            <span class="stat-value">LWR/FBR</span>
+                            <span class="stat-value">LWR/FBR Integration</span>
                         </div>
                     </div>
                     <div class="progress-bar">
                         <div class="progress-fill" style="width: 50%"></div>
+                    </div>
+                </div>
+
+                <div class="country-card">
+                    <div class="country-flag">🇮🇱</div>
+                    <div class="country-name">Israel</div>
+                    <div class="country-status status-research">Research</div>
+                    <div class="country-stats">
+                        <div class="stat-item">
+                            <span class="stat-label">University</span>
+                            <span class="stat-value">Ben-Gurion</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-label">Partner</span>
+                            <span class="stat-value">Brookhaven Lab</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-label">Investment</span>
+                            <span class="stat-value">Academic + Defense</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-label">Focus</span>
+                            <span class="stat-value">Self-sustaining Cycles</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-label">Expertise</span>
+                            <span class="stat-value">Underground Facilities</span>
+                        </div>
+                    </div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: 40%"></div>
+                    </div>
+                </div>
+
+                <div class="country-card">
+                    <div class="country-flag">🇨🇭</div>
+                    <div class="country-name">Switzerland</div>
+                    <div class="country-status status-research">Research</div>
+                    <div class="country-stats">
+                        <div class="stat-item">
+                            <span class="stat-label">Institute</span>
+                            <span class="stat-value">Paul Scherrer (PSI)</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-label">Partner</span>
+                            <span class="stat-value">Copenhagen Atomics</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-label">Investment</span>
+                            <span class="stat-value">EU + National</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-label">Target</span>
+                            <span class="stat-value">2026 Critical Exp.</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-label">Focus</span>
+                            <span class="stat-value">MSR Testing</span>
+                        </div>
+                    </div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: 55%"></div>
+                    </div>
+                </div>
+
+                <div class="country-card">
+                    <div class="country-flag">🇷🇺</div>
+                    <div class="country-name">Russia</div>
+                    <div class="country-status status-planning">Planning</div>
+                    <div class="country-stats">
+                        <div class="stat-item">
+                            <span class="stat-label">Program</span>
+                            <span class="stat-value">Gen IV Forum</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-label">Institute</span>
+                            <span class="stat-value">Rosatom</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-label">Investment</span>
+                            <span class="stat-value">Research Phase</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-label">Focus</span>
+                            <span class="stat-value">Fast Reactors</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-label">Status</span>
+                            <span class="stat-value">Early Stage</span>
+                        </div>
+                    </div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: 25%"></div>
                     </div>
                 </div>
             </div>
@@ -1038,6 +1356,8 @@
         <!-- Technical Section -->
         <section id="technical" class="section">
             <div class="hero">
+                <div class="nuclear-particles"></div>
+                <div class="energy-wave"></div>
                 <h1>🔧 Technical Specifications</h1>
                 <p>Engineering Excellence in Dual-Level Design</p>
             </div>
@@ -1134,6 +1454,8 @@
         <!-- Comparison Section -->
         <section id="comparison" class="section">
             <div class="hero">
+                <div class="nuclear-particles"></div>
+                <div class="energy-wave"></div>
                 <h1>📊 Global Comparison</h1>
                 <p>Analyzing International Thorium Programs</p>
             </div>
@@ -1152,7 +1474,7 @@
                         <thead>
                             <tr>
                                 <th>Country</th>
-                                <th>Development Stage</th>
+                                <th>Stage</th>
                                 <th>Investment</th>
                                 <th>Timeline</th>
                                 <th>Key Achievement</th>
@@ -1169,7 +1491,7 @@
                             <tr>
                                 <td><div class="country-col">🇮🇳 India</div></td>
                                 <td><span class="country-status status-development">Advanced Dev</span></td>
-                                <td>Significant</td>
+                                <td>Major National</td>
                                 <td>2025-2030</td>
                                 <td>300 MWe AHWR design</td>
                             </tr>
@@ -1181,6 +1503,20 @@
                                 <td>ANEEL fuel testing</td>
                             </tr>
                             <tr>
+                                <td><div class="country-col">🇨🇭 Switzerland</div></td>
+                                <td><span class="country-status status-research">Research</span></td>
+                                <td>EU + National</td>
+                                <td>2026</td>
+                                <td>PSI critical experiment</td>
+                            </tr>
+                            <tr>
+                                <td><div class="country-col">🇳🇴 Norway</div></td>
+                                <td><span class="country-status status-research">Research</span></td>
+                                <td>Gov + Private</td>
+                                <td>Ongoing</td>
+                                <td>Th-MOX fuel validation</td>
+                            </tr>
+                            <tr>
                                 <td><div class="country-col">🇫🇷 France</div></td>
                                 <td><span class="country-status status-research">Research</span></td>
                                 <td>€20 Million</td>
@@ -1188,11 +1524,25 @@
                                 <td>Ultra-compact design</td>
                             </tr>
                             <tr>
-                                <td><div class="country-col">🇳🇴 Norway</div></td>
+                                <td><div class="country-col">🇯🇵 Japan</div></td>
                                 <td><span class="country-status status-research">Research</span></td>
-                                <td>Moderate</td>
+                                <td>Academic + Gov</td>
                                 <td>Ongoing</td>
-                                <td>Th-MOX fuel validation</td>
+                                <td>KUCA experiments</td>
+                            </tr>
+                            <tr>
+                                <td><div class="country-col">🇮🇱 Israel</div></td>
+                                <td><span class="country-status status-research">Research</span></td>
+                                <td>Academic + Defense</td>
+                                <td>Ongoing</td>
+                                <td>Underground expertise</td>
+                            </tr>
+                            <tr>
+                                <td><div class="country-col">🇷🇺 Russia</div></td>
+                                <td><span class="country-status status-planning">Planning</span></td>
+                                <td>Research Phase</td>
+                                <td>TBD</td>
+                                <td>Gen IV participation</td>
                             </tr>
                         </tbody>
                     </table>
@@ -1207,7 +1557,7 @@
                 <div class="specs-grid">
                     <div class="spec-card">
                         <div class="spec-value">MSR</div>
-                        <div class="spec-label">China, USA</div>
+                        <div class="spec-label">China, USA, Switzerland</div>
                     </div>
                     <div class="spec-card">
                         <div class="spec-value">AHWR</div>
@@ -1215,7 +1565,7 @@
                     </div>
                     <div class="spec-card">
                         <div class="spec-value">Fast Reactor</div>
-                        <div class="spec-label">France</div>
+                        <div class="spec-label">France, Russia</div>
                     </div>
                     <div class="spec-card">
                         <div class="spec-value">Th-MOX</div>
@@ -1228,6 +1578,8 @@
         <!-- Timeline Section -->
         <section id="timeline" class="section">
             <div class="hero">
+                <div class="nuclear-particles"></div>
+                <div class="energy-wave"></div>
                 <h1>📅 Development Timeline</h1>
                 <p>Milestones in Thorium Nuclear Technology</p>
             </div>
@@ -1237,8 +1589,8 @@
                     <div class="timeline-dot"></div>
                     <div class="timeline-date">1965-1969</div>
                     <div class="timeline-content">
-                        <h3>🇺🇸 Oak Ridge MSRE</h3>
-                        <p>First molten salt reactor demonstration with 15,000+ hours of operation</p>
+                        <h3>Oak Ridge MSRE</h3>
+                        <p>🇺🇸 First molten salt reactor demonstration with 15,000+ hours of operation</p>
                     </div>
                 </div>
 
@@ -1246,8 +1598,8 @@
                     <div class="timeline-dot"></div>
                     <div class="timeline-date">2011</div>
                     <div class="timeline-content">
-                        <h3>🇨🇳 China Program Launch</h3>
-                        <p>¥3 billion investment in thorium MSR development begins</p>
+                        <h3>China Program Launch</h3>
+                        <p>🇨🇳 ¥3 billion investment in thorium MSR development begins</p>
                     </div>
                 </div>
 
@@ -1255,8 +1607,8 @@
                     <div class="timeline-dot"></div>
                     <div class="timeline-date">2013-2018</div>
                     <div class="timeline-content">
-                        <h3>🇳🇴 Norway Testing</h3>
-                        <p>Thor Energy completes 5-year thorium fuel irradiation trials</p>
+                        <h3>Norway Testing</h3>
+                        <p>🇳🇴 Thor Energy completes 5-year thorium fuel irradiation trials</p>
                     </div>
                 </div>
 
@@ -1264,8 +1616,8 @@
                     <div class="timeline-dot"></div>
                     <div class="timeline-date">Oct 2023</div>
                     <div class="timeline-content">
-                        <h3>🇨🇳 TMSR-LF1 Critical</h3>
-                        <p>World's first operational thorium MSR achieves criticality</p>
+                        <h3>TMSR-LF1 Critical</h3>
+                        <p>🇨🇳 World's first operational thorium MSR achieves criticality</p>
                     </div>
                 </div>
 
@@ -1273,8 +1625,8 @@
                     <div class="timeline-dot"></div>
                     <div class="timeline-date">June 2024</div>
                     <div class="timeline-content">
-                        <h3>🇨🇳 Full Power Operation</h3>
-                        <p>TMSR-LF1 reaches full 2 MWt power operation</p>
+                        <h3>Full Power Operation</h3>
+                        <p>🇨🇳 TMSR-LF1 reaches full 2 MWt power operation</p>
                     </div>
                 </div>
 
@@ -1282,8 +1634,8 @@
                     <div class="timeline-dot"></div>
                     <div class="timeline-date">Oct 2024</div>
                     <div class="timeline-content">
-                        <h3>🇨🇳 Online Refueling</h3>
-                        <p>World's first successful online refueling while operating</p>
+                        <h3>Online Refueling</h3>
+                        <p>🇨🇳 World's first successful online refueling while operating</p>
                     </div>
                 </div>
 
@@ -1291,8 +1643,9 @@
                     <div class="timeline-dot"></div>
                     <div class="timeline-date">2026</div>
                     <div class="timeline-content">
-                        <h3>🇺🇸 Test Reactors</h3>
-                        <p>US aims for criticality in 3+ test reactors</p>
+                        <h3>Multiple Milestones</h3>
+                        <p>🇺🇸 US: 3+ test reactors critical<br>
+                        🇨🇭 Switzerland: PSI critical experiment</p>
                     </div>
                 </div>
 
@@ -1300,8 +1653,8 @@
                     <div class="timeline-dot"></div>
                     <div class="timeline-date">2030</div>
                     <div class="timeline-content">
-                        <h3>🇨🇳 Commercial Scale</h3>
-                        <p>373 MWt commercial reactor planned</p>
+                        <h3>Commercial Scale</h3>
+                        <p>🇨🇳 373 MWt commercial reactor planned</p>
                     </div>
                 </div>
 
@@ -1309,8 +1662,8 @@
                     <div class="timeline-dot"></div>
                     <div class="timeline-date">2033</div>
                     <div class="timeline-content">
-                        <h3>🇫🇷 First Reactor</h3>
-                        <p>Stellaria targets first reactor operation</p>
+                        <h3>European Deployment</h3>
+                        <p>🇫🇷 Stellaria targets first reactor operation</p>
                     </div>
                 </div>
             </div>
@@ -1318,6 +1671,88 @@
     </main>
 
     <script>
+        // Create nuclear particle animations
+        function createNuclearAnimation() {
+            const particleContainers = document.querySelectorAll('.nuclear-particles');
+            
+            particleContainers.forEach(container => {
+                // Clear existing particles
+                container.innerHTML = '';
+                
+                // Create nucleus
+                const nucleus = document.createElement('div');
+                nucleus.className = 'nucleus';
+                nucleus.style.left = '50%';
+                nucleus.style.top = '50%';
+                nucleus.style.transform = 'translate(-50%, -50%)';
+                container.appendChild(nucleus);
+                
+                // Create electron orbits
+                for (let i = 0; i < 3; i++) {
+                    const electron = document.createElement('div');
+                    electron.className = 'electron';
+                    electron.style.width = `${80 + i * 40}px`;
+                    electron.style.height = `${80 + i * 40}px`;
+                    electron.style.left = '50%';
+                    electron.style.top = '50%';
+                    electron.style.transform = `translate(-50%, -50%) rotate(${i * 60}deg)`;
+                    electron.style.animationDelay = `${i * 0.3}s`;
+                    electron.style.animationDuration = `${8 + i * 2}s`;
+                    container.appendChild(electron);
+                }
+                
+                // Create floating particles
+                for (let i = 0; i < 20; i++) {
+                    const particle = document.createElement('div');
+                    particle.className = 'particle';
+                    particle.style.left = `${Math.random() * 100}%`;
+                    particle.style.top = `${Math.random() * 100}%`;
+                    particle.style.animation = `float ${5 + Math.random() * 5}s infinite ease-in-out`;
+                    particle.style.animationDelay = `${Math.random() * 5}s`;
+                    container.appendChild(particle);
+                }
+            });
+        }
+
+        // Add floating animation
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes float {
+                0%, 100% { 
+                    transform: translateY(0) translateX(0); 
+                    opacity: 0.3;
+                }
+                25% { 
+                    transform: translateY(-20px) translateX(10px); 
+                    opacity: 0.8;
+                }
+                50% { 
+                    transform: translateY(10px) translateX(-10px); 
+                    opacity: 0.6;
+                }
+                75% { 
+                    transform: translateY(-10px) translateX(5px); 
+                    opacity: 0.9;
+                }
+            }
+        `;
+        document.head.appendChild(style);
+
+        // Initialize animations when page loads
+        window.addEventListener('load', () => {
+            createNuclearAnimation();
+        });
+
+        // Mobile menu toggle
+        const mobileMenuToggle = document.getElementById('mobileMenuToggle');
+        const navMenu = document.getElementById('navMenu');
+
+        if (mobileMenuToggle) {
+            mobileMenuToggle.addEventListener('click', () => {
+                navMenu.classList.toggle('active');
+            });
+        }
+
         // Theme Toggle
         const themeToggle = document.querySelector('.theme-toggle');
         const themeIcon = document.querySelector('.theme-icon');
@@ -1359,8 +1794,13 @@
                     section.classList.remove('active');
                     if (section.id === targetSection) {
                         section.classList.add('active');
+                        // Recreate animations for new section
+                        createNuclearAnimation();
                     }
                 });
+                
+                // Close mobile menu
+                navMenu.classList.remove('active');
             });
         });
 
@@ -1390,32 +1830,37 @@
             });
         }
 
-        // Create Comparison Chart
+        // Create Comparison Chart with fixed country names
         function createComparisonChart() {
             const svg = document.getElementById('comparisonChart');
             if (!svg) return;
             
             const data = [
-                { country: 'China 🇨🇳', progress: 100, investment: 90, timeline: 100 },
-                { country: 'India 🇮🇳', progress: 80, investment: 70, timeline: 60 },
-                { country: 'USA 🇺🇸', progress: 75, investment: 95, timeline: 50 },
-                { country: 'France 🇫🇷', progress: 45, investment: 40, timeline: 30 },
-                { country: 'Norway 🇳🇴', progress: 60, investment: 35, timeline: 70 },
-                { country: 'Japan 🇯🇵', progress: 50, investment: 45, timeline: 40 }
+                { country: 'China', flag: '🇨🇳', progress: 100, investment: 90, timeline: 100 },
+                { country: 'India', flag: '🇮🇳', progress: 80, investment: 70, timeline: 60 },
+                { country: 'USA', flag: '🇺🇸', progress: 75, investment: 95, timeline: 50 },
+                { country: 'Switzerland', flag: '🇨🇭', progress: 55, investment: 50, timeline: 45 },
+                { country: 'Norway', flag: '🇳🇴', progress: 60, investment: 35, timeline: 70 },
+                { country: 'France', flag: '🇫🇷', progress: 45, investment: 40, timeline: 30 },
+                { country: 'Japan', flag: '🇯🇵', progress: 50, investment: 45, timeline: 40 },
+                { country: 'Israel', flag: '🇮🇱', progress: 40, investment: 35, timeline: 35 },
+                { country: 'Russia', flag: '🇷🇺', progress: 25, investment: 30, timeline: 20 }
             ];
             
-            const width = svg.clientWidth;
+            const width = svg.clientWidth || 800;
             const height = 400;
-            const margin = { top: 40, right: 120, bottom: 60, left: 80 };
+            const margin = { top: 40, right: 120, bottom: 80, left: 80 };
             const innerWidth = width - margin.left - margin.right;
             const innerHeight = height - margin.top - margin.bottom;
             
             // Clear existing content
             svg.innerHTML = '';
+            svg.setAttribute('viewBox', `0 0 ${width} ${height}`);
             
             // Create bars for each metric
-            const barWidth = innerWidth / (data.length * 3 + data.length - 1);
-            const spacing = barWidth * 0.5;
+            const groupWidth = innerWidth / data.length;
+            const barWidth = groupWidth * 0.25;
+            const spacing = groupWidth * 0.05;
             
             // Add title
             const title = document.createElementNS('http://www.w3.org/2000/svg', 'text');
@@ -1458,11 +1903,11 @@
             
             // Create bars
             data.forEach((d, i) => {
-                const groupX = margin.left + i * (barWidth * 3 + spacing);
+                const groupX = margin.left + i * groupWidth;
                 
                 // Progress bar
                 const progressBar = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
-                progressBar.setAttribute('x', groupX);
+                progressBar.setAttribute('x', groupX + spacing);
                 progressBar.setAttribute('y', margin.top + innerHeight - (d.progress / 100 * innerHeight));
                 progressBar.setAttribute('width', barWidth);
                 progressBar.setAttribute('height', d.progress / 100 * innerHeight);
@@ -1470,15 +1915,14 @@
                 progressBar.setAttribute('opacity', '0');
                 svg.appendChild(progressBar);
                 
-                // Animate
                 setTimeout(() => {
                     progressBar.setAttribute('opacity', '0.8');
                     progressBar.style.transition = 'all 0.5s ease';
-                }, i * 100);
+                }, i * 50);
                 
                 // Investment bar
                 const investmentBar = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
-                investmentBar.setAttribute('x', groupX + barWidth);
+                investmentBar.setAttribute('x', groupX + spacing + barWidth);
                 investmentBar.setAttribute('y', margin.top + innerHeight - (d.investment / 100 * innerHeight));
                 investmentBar.setAttribute('width', barWidth);
                 investmentBar.setAttribute('height', d.investment / 100 * innerHeight);
@@ -1489,11 +1933,11 @@
                 setTimeout(() => {
                     investmentBar.setAttribute('opacity', '0.8');
                     investmentBar.style.transition = 'all 0.5s ease';
-                }, i * 100 + 50);
+                }, i * 50 + 25);
                 
                 // Timeline bar
                 const timelineBar = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
-                timelineBar.setAttribute('x', groupX + barWidth * 2);
+                timelineBar.setAttribute('x', groupX + spacing + barWidth * 2);
                 timelineBar.setAttribute('y', margin.top + innerHeight - (d.timeline / 100 * innerHeight));
                 timelineBar.setAttribute('width', barWidth);
                 timelineBar.setAttribute('height', d.timeline / 100 * innerHeight);
@@ -1504,15 +1948,24 @@
                 setTimeout(() => {
                     timelineBar.setAttribute('opacity', '0.8');
                     timelineBar.style.transition = 'all 0.5s ease';
-                }, i * 100 + 100);
+                }, i * 50 + 50);
                 
-                // Country label
+                // Country flag
+                const flag = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+                flag.setAttribute('x', groupX + groupWidth / 2);
+                flag.setAttribute('y', margin.top + innerHeight + 20);
+                flag.setAttribute('text-anchor', 'middle');
+                flag.setAttribute('font-size', '20');
+                flag.textContent = d.flag;
+                svg.appendChild(flag);
+                
+                // Country name
                 const label = document.createElementNS('http://www.w3.org/2000/svg', 'text');
-                label.setAttribute('x', groupX + barWidth * 1.5);
-                label.setAttribute('y', margin.top + innerHeight + 25);
+                label.setAttribute('x', groupX + groupWidth / 2);
+                label.setAttribute('y', margin.top + innerHeight + 40);
                 label.setAttribute('text-anchor', 'middle');
                 label.setAttribute('fill', 'var(--text-secondary)');
-                label.setAttribute('font-size', '12');
+                label.setAttribute('font-size', '11');
                 label.textContent = d.country;
                 svg.appendChild(label);
             });
@@ -1611,6 +2064,13 @@
         // Initialize page
         window.addEventListener('load', () => {
             document.body.classList.add('fade-in');
+        });
+
+        // Handle window resize
+        window.addEventListener('resize', () => {
+            if (document.querySelector('.nav-item.active').dataset.section === 'comparison') {
+                createComparisonChart();
+            }
         });
     </script>
 </body>
